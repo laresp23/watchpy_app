@@ -1,0 +1,62 @@
+<!-- series.html -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WATCH.PY | Series </title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">Watch.PY</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'peliculas' %}">Películas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'series' %}">Series</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>Series</h2>
+        <div class="row">
+            {% for serie in series %}
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <img src="https://image.tmdb.org/t/p/w500{{ serie.poster_path }}" class="card-img-top" alt="{{ serie.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ serie.name }}</h5>
+                        <p class="card-text">{{ serie.overview }}</p>
+                        <a href="{% url 'detalle_media' %}?media_type=tv&id={{ serie.id }}" class="btn btn-primary">Ver Detalles</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Watch.PY</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
