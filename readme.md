@@ -15,4 +15,4 @@ La aplicación permite a los usuarios ver una amplia variedad de películas y se
 
 - **Frontend:** HTML5, CSS3, JavaScript,Bootstrap
 - **Backend:** Django
-- **Base de datos:** 
+- **Base de datos:**  ORM Django
