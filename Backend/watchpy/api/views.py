@@ -1,6 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -8,10 +11,13 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
-from rest_framework.reverse import reverse
+from rest_framework.reverse import reverse as api_reverse
 from rest_framework_simplejwt.tokens import RefreshToken
-import requests
+from .models import WatchedMedia, Movie, Serie
 from .serializers import UserSerializer, LoginSerializer
+import requests
+
+# Obtener películas, series y detalles
 
 def obtener_api_key():
     """Obtiene la clave de la API (debería implementar una lógica más segura para obtenerla)."""
@@ -60,6 +66,9 @@ def obtener_trailer(media_type, item_id):
         if data.get('results'):
             return data['results'][0].get('key')
     return None
+
+def not_found(request, exception=None):
+    return Response({"error": "Página no encontrada"}, status=status.HTTP_404_NOT_FOUND)
 
 class Home(APIView):
     @staticmethod
@@ -150,12 +159,40 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'home': reverse('home', request=request, format=format),
-        'peliculas': reverse('peliculas', request=request, format=format),
-        'series': reverse('series', request=request, format=format),
-        'detalle_media': reverse('detalle-media', request=request, format=format),
-        'register': reverse('register', request=request, format=format),
-        'login': reverse('login', request=request, format=format),
-        'logout': reverse('logout', request=request, format=format),
-        'users': reverse('user-list', request=request, format=format)
+        'home': api_reverse('home', request=request, format=format),
+        'peliculas': api_reverse('peliculas', request=request, format=format),
+        'series': api_reverse('series', request=request, format=format),
+        'detalle_media': api_reverse('detalle-media', request=request, format=format),
+        'register': api_reverse('register', request=request, format=format),
+        'login': api_reverse('login', request=request, format=format),
+        'logout': api_reverse('logout', request=request, format=format),
+        'users': api_reverse('user-list', request=request, format=format)
     })
+
+@api_view(['POST'])
+def mark_movie_as_watched(request, movie_id):
+    movie = get_object_or_404(Movie, pk=movie_id)
+    user = request.user
+    
+    # Verificar si el usuario ya ha visto esta película
+    if not WatchedMedia.objects.filter(user=user, media=movie).exists():
+        # Si no, crear instancia de WatchedMedia
+        watched_movie = WatchedMedia.objects.create(user=user, media=movie)
+        return Response({"message": "Película marcada como vista"}, status=status.HTTP_201_CREATED)
+    else:
+        # Si el usuario ya ha visto la película, devolver un mensaje de error
+        return Response({"error": "El usuario ya ha marcado esta película como vista"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def mark_series_as_watched(request, series_id):
+    series = get_object_or_404(Series, pk=series_id)
+    user = request.user
+    
+    # Verificar si el usuario ya ha visto esta serie
+    if not WatchedMedia.objects.filter(user=user, media=series).exists():
+        # Si no, crear instancia de WatchedMedia
+        watched_series = WatchedMedia.objects.create(user=user, media=series)
+        return Response({"message": "Serie marcada como vista"}, status=status.HTTP_201_CREATED)
+    else:
+        # Si el usuario ya ha visto la serie, devolver un mensaje de error
+        return Response({"error": "El usuario ya ha marcado esta serie como vista"}, status=status.HTTP_400_BAD_REQUEST)
