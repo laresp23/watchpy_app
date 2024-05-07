@@ -1,36 +1,26 @@
+# Importación del módulo de administración de Django
 from django.contrib import admin
-from .models import UserProfile, Movie, Serie, WatchedMedia
 
-@admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'bio', 'avatar', 'created_at')
-    search_fields = ('user__username', 'user__email', 'bio')
-    list_filter = ('created_at',)
+# Importación de modelos
+from .models import Pelicula, Serie, PerfilUsuario
 
-@admin.register(Movie)
-class MovieAdmin(admin.ModelAdmin):
-    list_display = ('title', 'overview', 'release_date', 'poster_path')
-    search_fields = ('title', 'overview')
-    list_filter = ('release_date',)
+# Registro de Película en el panel de administración
+@admin.register(Pelicula)
+class PeliculaAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'descripcion', 'fecha_estreno', 'ruta_poster')
+    search_fields = ('titulo', 'descripcion')
+    list_filter = ('fecha_estreno',)
 
+# Registro de Serie en el panel de administración
 @admin.register(Serie)
-class SeriesAdmin(admin.ModelAdmin):
-    list_display = ('title', 'overview', 'first_air_date', 'poster_path')
-    search_fields = ('title', 'overview')
-    list_filter = ('first_air_date',)
+class SerieAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'descripcion', 'fecha_estreno', 'ruta_poster')
+    search_fields = ('titulo', 'descripcion')
+    list_filter = ('fecha_estreno',)
 
-@admin.register(WatchedMedia)
-class WatchedMediaAdmin(admin.ModelAdmin):
-    list_display = ('user', 'get_media_title', 'watched_at')
-    search_fields = ('user__username', 'movie__title', 'series__title')  # Cambiado de 'media__title'
-    list_filter = ('watched_at',)
-
-    def get_media_title(self, obj):
-        if obj.movie:
-            return obj.movie.title
-        elif obj.series:
-            return obj.series.title
-        else:
-            return "Unknown"
-
-    get_media_title.short_description = 'Media Title'
+# Registro de PerfilUsuario en el panel de administración
+@admin.register(PerfilUsuario)
+class PerfilUsuarioAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'biografia', 'avatar', 'creado_en')
+    search_fields = ('usuario__username',)
+    list_filter = ('creado_en',)

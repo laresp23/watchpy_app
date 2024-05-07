@@ -1,198 +1,244 @@
-from django.contrib.auth.decorators import login_required
+# Modelo de usuario de Django para autenticación y gestión de usuarios
 from django.contrib.auth.models import User
+
+# Funciones relacionadas con la autenticación
 from django.contrib.auth import authenticate, login, logout
-from django.http import JsonResponse, HttpResponseRedirect
+
+# Funciones de acceso rápido para obtener objetos o generar un error 404
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
-from django.views.decorators.http import require_http_methods
+
+# Vistas y ViewSets para puntos finales de la API
 from rest_framework.views import APIView
+
+# Clase de respuesta para devolver respuestas de la API
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+
+# Códigos de estado HTTP
 from rest_framework import status
+
+# Clases de permisos para controlar el acceso a las vistas
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
-from rest_framework.reverse import reverse as api_reverse
+
+# Decorador para establecer permisos en las vistas
+from rest_framework.decorators import api_view, permission_classes
+
+# Función de reversión para generar URLs
+from rest_framework.reverse import reverse
+
+# Generación de tokens y autenticación
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import WatchedMedia, Movie, Serie
-from .serializers import UserSerializer, LoginSerializer
+
+# Importación de serializadores para serialización/deserialización de datos
+from .serializers import (
+    UsuarioSerializer,  # Serializador para datos de usuario
+    LoginSerializer,    # Serializador para datos de inicio de sesión
+    PeliculaSerializer, # Serializador para datos de películas
+    SerieSerializer,    # Serializador para datos de series
+)
+
+# Solicitudes externas
 import requests
 
-# Obtener películas, series y detalles
 
-def obtener_api_key():
-    """Obtiene la clave de la API (debería implementar una lógica más segura para obtenerla)."""
-    return 'fe1a6340812a4559051b8ec620a4e866'
+# Constantes
+API_KEY = "fe1a6340812a4559051b8ec620a4e866"
+IDIOMA = "es"
 
-def obtener_medios(media_type):
+
+# Funciones de utilidad
+def obtener_medios(tipo_medio):
     """Obtiene los medios (películas o series) populares."""
-    api_key = obtener_api_key()
-    language = 'es'
-    url = f'https://api.themoviedb.org/3/{media_type}/popular?api_key={api_key}&language={language}'
+    url = f"https://api.themoviedb.org/3/{tipo_medio}/popular?api_key={API_KEY}&language={IDIOMA}"
     response = requests.get(url)
-    data = response.json().get('results', [])
+    data = response.json().get("results", [])
     return data
 
-def obtener_detalles(media_type, item_id):
-    """
-    Obtiene los detalles de una película o serie.
-    
-    Parámetros GET:
-    - media_type: tipo de medio ('movie' o 'tv').
-    - id: ID de la película o serie.
-    """
-    api_key = obtener_api_key()
-    language = 'es'
-    url = f'https://api.themoviedb.org/3/{media_type}/{item_id}?api_key={api_key}&language={language}'
+
+def obtener_detalles(tipo_medio, id_item):
+    """Obtiene los detalles de una película o serie."""
+    url = f"https://api.themoviedb.org/3/{tipo_medio}/{id_item}?api_key={API_KEY}&language={IDIOMA}"
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()
-    else:
-        return None
+    return None
 
-def obtener_trailer(media_type, item_id):
-    """
-    Obtiene el trailer de una película o serie.
-    
-    Parámetros GET:
-    - media_type: tipo de medio ('movie' o 'tv').
-    - id: ID de la película o serie.
-    """
-    api_key = obtener_api_key()
-    language = 'es'
-    url = f'https://api.themoviedb.org/3/{media_type}/{item_id}/videos?api_key={api_key}&language={language}'
+
+def obtener_trailer(tipo_medio, id_item):
+    """Obtiene el trailer de una película o serie."""
+    url = f"https://api.themoviedb.org/3/{tipo_medio}/{id_item}/videos?api_key={API_KEY}&language={IDIOMA}"
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
-        if data.get('results'):
-            return data['results'][0].get('key')
+        if data.get("results"):
+            return data["results"][0].get("key")
     return None
 
-def not_found(request, exception=None):
-    return Response({"error": "Página no encontrada"}, status=status.HTTP_404_NOT_FOUND)
 
+# Funciones Api
 class Home(APIView):
-    @staticmethod
-    def get(request):
-        """Renderiza la página de inicio."""
-        return JsonResponse({"message": "Welcome to Watch.PY API"})
+    """Renderiza la página de inicio."""
+
+    def get(self, request):
+        return Response({"message": "Bienvenido a la API de Watch.PY"})
+
 
 class Peliculas(APIView):
-    @staticmethod
-    def get(request):
-        """Obtiene y muestra las películas populares."""
-        movies = obtener_medios('movie')
-        return JsonResponse({'movies': movies})
+    """Obtiene y muestra las películas populares."""
+
+    def get(self, request):
+        peliculas = obtener_medios("movie")
+        serializer = PeliculaSerializer(peliculas, many=True)
+        return Response({"peliculas": serializer.data})
+
 
 class Series(APIView):
-    @staticmethod
-    def get(request):
-        """Obtiene y muestra las series populares."""
-        series = obtener_medios('tv')
-        return JsonResponse({'series': series})
+    """Obtiene y muestra las series populares."""
 
-class DetalleMedia(APIView):
-    @staticmethod
-    def get(request):
-        """
-        Obtiene los detalles de una película o serie y su trailer.
-        
-        Parámetros GET:
-        - media_type: tipo de medio ('movie' o 'tv').
-        - id: ID de la película o serie.
-        """
-        media_type = request.GET.get('media_type')
-        item_id = request.GET.get('id')
-        
-        if media_type in ['movie', 'tv'] and item_id.isdigit():
-            media_details = obtener_detalles(media_type, item_id)
-            trailer_key = obtener_trailer(media_type, item_id)
-            return JsonResponse({'media_details': media_details, 'trailer_key': trailer_key})
-        else:
-            return JsonResponse({'error': 'Invalid request'}, status=400)
+    def get(self, request):
+        series = obtener_medios("tv")
+        serializer = SerieSerializer(series, many=True)
+        return Response({"series": serializer.data})
 
-class RegisterUser(APIView):
-    @staticmethod
-    def post(request):
-        serializer = UserSerializer(data=request.data)
+
+class DetallePelicula(APIView):
+    """Obtiene los detalles de una película y su trailer."""
+
+    def get(self, request, pk):
+        detalles_pelicula = obtener_detalles("movie", pk)
+        if not detalles_pelicula:
+            return Response(
+                {"error": "No se encontró la película"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        trailer_key = obtener_trailer("movie", pk)
+        return Response(
+            {"detalles_media": detalles_pelicula, "trailer_key": trailer_key}
+        )
+
+
+class DetalleSerie(APIView):
+    """Obtiene los detalles de una serie y su trailer."""
+
+    def get(self, request, pk):
+        detalles_serie = obtener_detalles("tv", pk)
+        if not detalles_serie:
+            return Response(
+                {"error": "No se encontró la serie"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        trailer_key = obtener_trailer("tv", pk)
+        return Response({"detalles_media": detalles_serie, "trailer_key": trailer_key})
+
+
+class RegistrarUsuario(APIView):
+    """Registra un nuevo usuario."""
+
+    def post(self, request):
+        serializer = UsuarioSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "Registro completo"}, status=status.HTTP_201_CREATED)
+            return Response(
+                {"message": "Registro completo"}, status=status.HTTP_201_CREATED
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class LoginUser(APIView):
-    @staticmethod
-    @require_http_methods(["POST"])
-    def post(request):
+
+class IniciarSesionUsuario(APIView):
+    """Inicia sesión de usuario."""
+
+    def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        username = serializer.validated_data['username']
-        password = serializer.validated_data['password']
+        nombre_usuario = serializer.validated_data["nombre_usuario"]
+        contraseña = serializer.validated_data["contraseña"]
 
-        user = authenticate(username=username, password=password)
-        if not user:
-            return Response({"message": "Credenciales inválidas"}, status=status.HTTP_401_UNAUTHORIZED)
+        usuario = authenticate(username=nombre_usuario, password=contraseña)
+        if not usuario:
+            return Response(
+                {"message": "Credenciales inválidas"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
-        login(request, user)  # Aquí se realiza el login del usuario
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'access': str(refresh.access_token),
-            'refresh': str(refresh)
-        })
+        login(request, usuario)
+        refresh = RefreshToken.for_user(usuario)
+        return Response({"access": str(refresh.access_token), "refresh": str(refresh)})
 
-class LogoutUser(APIView):
-    @staticmethod
-    def post(request):
+
+class CerrarSesionUsuario(APIView):
+    """Cierra sesión de usuario."""
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
         logout(request)
-        return Response({'message': 'Sesión cerrada correctamente'}, status=status.HTTP_200_OK)
+        return Response(
+            {"message": "Sesión cerrada correctamente"}, status=status.HTTP_200_OK
+        )
 
-class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+
+class ListaUsuarios(APIView):
+    """Obtiene la lista de usuarios."""
+
     permission_classes = [IsAuthenticated]
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    def get(self, request):
+        usuarios = User.objects.all()
+        serializer = UsuarioSerializer(usuarios, many=True)
+        return Response(serializer.data)
+
+
+class DetalleUsuario(APIView):
+    """Obtiene, actualiza o elimina un usuario."""
+
     permission_classes = [IsAuthenticated]
 
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'home': api_reverse('home', request=request, format=format),
-        'peliculas': api_reverse('peliculas', request=request, format=format),
-        'series': api_reverse('series', request=request, format=format),
-        'detalle_media': api_reverse('detalle-media', request=request, format=format),
-        'register': api_reverse('register', request=request, format=format),
-        'login': api_reverse('login', request=request, format=format),
-        'logout': api_reverse('logout', request=request, format=format),
-        'users': api_reverse('user-list', request=request, format=format)
-    })
+    def get(self, request, pk):
+        usuario = get_object_or_404(User, pk=pk)
+        serializer = UsuarioSerializer(usuario)
+        return Response(serializer.data)
 
-@api_view(['POST'])
-def mark_movie_as_watched(request, movie_id):
-    movie = get_object_or_404(Movie, pk=movie_id)
-    user = request.user
-    
-    # Verificar si el usuario ya ha visto esta película
-    if not WatchedMedia.objects.filter(user=user, media=movie).exists():
-        # Si no, crear instancia de WatchedMedia
-        watched_movie = WatchedMedia.objects.create(user=user, media=movie)
-        return Response({"message": "Película marcada como vista"}, status=status.HTTP_201_CREATED)
-    else:
-        # Si el usuario ya ha visto la película, devolver un mensaje de error
-        return Response({"error": "El usuario ya ha marcado esta película como vista"}, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, pk):
+        usuario = get_object_or_404(User, pk=pk)
+        serializer = UsuarioSerializer(usuario, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
-def mark_series_as_watched(request, series_id):
-    series = get_object_or_404(Series, pk=series_id)
-    user = request.user
-    
-    # Verificar si el usuario ya ha visto esta serie
-    if not WatchedMedia.objects.filter(user=user, media=series).exists():
-        # Si no, crear instancia de WatchedMedia
-        watched_series = WatchedMedia.objects.create(user=user, media=series)
-        return Response({"message": "Serie marcada como vista"}, status=status.HTTP_201_CREATED)
-    else:
-        # Si el usuario ya ha visto la serie, devolver un mensaje de error
-        return Response({"error": "El usuario ya ha marcado esta serie como vista"}, status=status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, pk):
+        usuario = get_object_or_404(User, pk=pk)
+        usuario.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def raiz_api(request, format=None):
+    """Obtiene la lista de endpoints de la API."""
+    if request.method == "GET":
+        return Response(
+            {
+                "inicio": reverse("home", request=request, format=format),
+                "peliculas": reverse("peliculas", request=request, format=format),
+                "series": reverse("series", request=request, format=format),
+                "detalle_media": reverse(
+                    "detalle-media", request=request, format=format
+                ),
+                "registrar": reverse("registrar", request=request, format=format),
+                "iniciar_sesion": reverse(
+                    "iniciar-sesion", request=request, format=format
+                ),
+                "cerrar_sesion": reverse(
+                    "cerrar-sesion", request=request, format=format
+                ),
+                "usuarios": reverse("lista-usuarios", request=request, format=format),
+            }
+        )
+
+
+@api_view(["GET"])
+def no_encontrado(request, exception=None):
+    """Maneja errores 404."""
+    return Response({"error": "Página no encontrada"}, status=status.HTTP_404_NOT_FOUND)
