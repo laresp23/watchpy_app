@@ -35,6 +35,7 @@ from .serializers import (
     PeliculaSerializer, # Serializador para datos de películas
     SerieSerializer,    # Serializador para datos de series
 )
+from rest_framework.permissions import AllowAny
 
 # Solicitudes externas
 import requests
@@ -73,6 +74,18 @@ def obtener_trailer(tipo_medio, id_item):
             return data["results"][0].get("key")
     return None
 
+# Funciones de utilidad para el manejo de usuarios
+def username_existente(username):
+    return User.objects.filter(username__iexact=username).exists()
+
+def email_existente(email):
+    return User.objects.filter(email__iexact=email).exists()
+
+def validar_usuario(username, email):
+    if username_existente(username):
+        raise ValueError("El nombre de usuario ya está en uso.")
+    if email_existente(email):
+        raise ValueError("El correo electrónico ya está en uso.")
 
 # Funciones Api
 class Home(APIView):
@@ -132,20 +145,25 @@ class DetalleSerie(APIView):
 
 
 class RegistrarUsuario(APIView):
-    """Registra un nuevo usuario."""
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = UsuarioSerializer(data=request.data)
         if serializer.is_valid():
+            username = serializer.validated_data.get('username')
+            email = serializer.validated_data.get('email')
+
+            try:
+                validar_usuario(username, email)
+            except ValueError as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
             serializer.save()
-            return Response(
-                {"message": "Registro completo"}, status=status.HTTP_201_CREATED
-            )
+            return Response({"message": "Registro completo"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class IniciarSesionUsuario(APIView):
-    """Inicia sesión de usuario."""
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -164,7 +182,6 @@ class IniciarSesionUsuario(APIView):
         login(request, usuario)
         refresh = RefreshToken.for_user(usuario)
         return Response({"access": str(refresh.access_token), "refresh": str(refresh)})
-
 
 class CerrarSesionUsuario(APIView):
     """Cierra sesión de usuario."""
