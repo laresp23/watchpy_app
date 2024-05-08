@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WatchPY</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Personalización de colores */
+        .bg-navbar {
+            background-color: transparent;
+        }
+
+        .bg-jumbotron {
+            background-image: url('https://source.unsplash.com/1600x900/?movie');
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .text-jumbotron {
+            color: #ffffff;
+        }
+
+        .bg-footer {
+            background-color: #0D47A1;
+        }
+
+        .text-footer {
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-white flex flex-col min-h-screen">
+
+    <!-- Barra de navegación -->
+    <nav class="bg-navbar p-4 absolute w-full z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-auto" viewBox="0 0 265.000000 85.000000" preserveAspectRatio="xMidYMid meet">
+                    <g transform="translate(0.000000,85.000000) scale(0.100000,-0.100000)" fill="#2196F3" stroke="none">
+                        <path d="M1285 736 c-16 -7 -39 -23 -50 -36 -19 -21 -20 -36 -20 -221 l0 -199
+                        32 -32 c28 -28 40 -32 95 -36 108 -6 152 38 146 147 l-3 56 -40 0 -40 0 -5
+                        -60 -5 -60 -40 0 -40 0 -3 182 c-2 177 -2 182 19 194 16 8 28 8 45 0 20 -9 24
+                        -18 24 -56 l0 -45 45 0 45 0 0 45 c0 26 -7 59 -15 74 -27 54 -122 77 -190 47z"/>
+                        <path d="M105 713 c3 -16 18 -151 35 -302 16 -151 31 -275 32 -275 2 -1 31 2
+                        64 7 l62 8 6 42 c3 23 11 94 18 157 7 63 14 106 15 95 2 -11 9 -78 17 -148 7
+                        -70 15 -130 18 -132 2 -3 31 -1 63 3 l59 7 33 270 c17 149 32 276 33 283 0 7
+                        -14 12 -39 12 -47 0 -44 12 -67 -220 -9 -96 -20 -178 -24 -183 -3 -4 -14 77
+                        -24 180 -9 104 -19 196 -22 206 -4 13 -16 17 -50 17 -24 0 -44 -1 -44 -2 0 -2
+                        -9 -95 -20 -208 -11 -113 -20 -211 -20 -219 0 -8 -2 -12 -4 -10 -2 2 -14 102
+                        -27 222 l-23 217 -48 0 c-46 0 -47 -1 -43 -27z"/>
+                        <path d="M617 463 c-25 -152 -45 -278 -43 -280 2 -2 22 -1 44 3 40 6 41 7 49
+                        58 l8 51 56 3 c61 3 69 -4 69 -70 0 -26 3 -28 44 -28 25 0 47 4 51 9 3 6 -16
+                        127 -41 270 l-47 261 -71 0 -72 0 -47 -277z m156 -85 c-7 -14 -83 -9 -83 5 0
+                        18 29 198 37 227 4 18 13 -12 28 -100 12 -69 20 -128 18 -132z"/>
+                        <path d="M880 705 l0 -35 50 0 50 0 0 -230 0 -230 50 0 50 0 0 230 0 230 50 0
+                        50 0 0 35 0 35 -150 0 -150 0 0 -35z"/>
+                        <path d="M1550 475 l0 -265 50 0 50 0 0 115 0 115 50 0 49 0 3 -117 3 -118 48
+                        -3 47 -3 0 270 0 271 -50 0 -50 0 0 -115 0 -115 -50 0 -50 0 0 115 0 115 -50
+                        0 -50 0 0 -265z"/>
+                        <path d="M1920 465 l0 -275 45 0 45 0 0 105 0 105 53 0 c66 0 97 16 119 60 22
+                        43 24 156 4 205 -24 57 -66 75 -173 75 l-93 0 0 -275z m175 105 l0 -85 -42 -3
+                        -43 -3 0 91 0 91 43 -3 42 -3 0 -85z"/>
+                        <path d="M2215 723 c3 -10 31 -97 61 -194 50 -164 54 -182 54 -277 l0 -102 29
+                        0 c16 0 36 -3 45 -6 14 -5 16 7 16 91 0 90 4 111 60 294 33 109 60 200 60 204
+                        0 4 -20 7 -44 7 l-44 0 -22 -82 c-39 -148 -48 -174 -54 -158 -3 8 -17 58 -31
+                        110 -14 52 -28 103 -31 113 -4 13 -16 17 -56 17 -44 0 -49 -2 -43 -17z"/>
+                    </g>
+                </svg>
+            </a>
+            <button class="navbar-toggler md:hidden" aria-label="Abrir menú">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7">
+                    </path>
+                </svg>
+            </button>
+            <div class="hidden md:flex md:items-center" id="navbarNav">
+                <div class="flex items-center">
+                    <!-- Botón de idioma -->
+                    <button class="mr-4 bg-transparent text-lg focus:outline-none">Español</button>
+                    <!-- Botón de inicio de sesión -->
+                    <button class="bg-transparent text-lg focus:outline-none">Iniciar sesión</button>
+                </div>
+            </div>
+            
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="flex-grow">
+        <!-- Jumbotron -->
+        <div class="jumbotron bg-jumbotron bg-cover bg-center flex items-center justify-center text-center relative">
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+            <div class="container mx-auto px-4 py-16 relative z-10">
+                <h1 class="text-5xl font-bold mb-8 text-jumbotron">Bienvenido a WatchPY</h1>
+                <p class="text-xl mb-8 text-jumbotron">Disfruta de miles de películas y series en cualquier lugar, sin
+                    compromiso.</p>
+                <a href="registro.html"
+                    class="btn-get-started bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-full uppercase transition duration-300 hidden md:block">Comienza
+                    ahora</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer bg-footer text-footer">
+        <div class="container mx-auto px-4 py-8 text-center">
+            <p>&copy; 2024 WatchPY</p>
+            <ul class="flex justify-center mt-4">
+                <li class="mr-6"><a href="#" class="text-white">Términos de servicio</a></li>
+                <li class="mr-6"><a href="#" class="text-white">Política de privacidad</a></li>
+                <li><a href="#" class="text-white">Contacto</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script>
+        // Función para cambiar la imagen de fondo del jumbotron
+        let jumbotron = document.querySelector('.jumbotron');
+        let images = ['https://source.unsplash.com/1600x900/?movie', 'https://source.unsplash.com/1600x900/?cinema', 'https://source.unsplash.com/1600x900/?popcorn'];
+
+        let index = 0;
+        setInterval(() => {
+            jumbotron.style.backgroundImage = `url('${images[index]}')`;
+            index = (index + 1) % images.length;
+        }, 5000);
+    </script>
+
+</body>
+
+</html>
