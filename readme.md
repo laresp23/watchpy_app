@@ -2,17 +2,29 @@
 
 Este proyecto es el resultado del trabajo realizado como proyecto final del curso de Desarrollo de Aplicaciones Web (DAW).
 
-## Descripción
+# Watch.PY
 
-La aplicación permite a los usuarios ver una amplia variedad de películas y series de televisión en línea, con una interfaz intuitiva y características similares a las de Netflix.
+Este repositorio contiene el código fuente para el proyecto Watch.PY, una plataforma de streaming para.
 
-## Funcionalidades
+## Contenido
 
-- Registro e inicio de sesión de usuarios.( en desarrollo)
-
+- [Backend](Backend)
+- [Frontend](Frontend)
 
 ## Tecnologías Utilizadas
 
-- **Frontend:** HTML5, CSS3, JavaScript,Bootstrap
-- **Backend:** Django
-- **Base de datos:**  ORM Django
+- **Frontend:** (En desarrollo)
+- **Backend:** Django , ORM Django , SQLite
+
+## Instalación
+
+Para configurar y ejecutar el proyecto, sigue los siguientes pasos:
+
+1. Clona este repositorio:
+
+    ```bash
+    git clone https://github.com/laresp23/watchpy_app.git
+    ```
+2. Abre la carpeta Backend y sigue las indicaciones del readme.md
+
+3. Abre la carpeta Frontend (Cuando este completo) y sigue las indicaciones que se redactaran en el archivo readme.md

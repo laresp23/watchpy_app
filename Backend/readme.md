@@ -34,12 +34,14 @@ La API de Watch.PY es una plataforma de streaming que proporciona endpoints para
 1. Clona el repositorio:
 
     ```bash
-    git clone https://github.com/laresp23/watchpy_app/tree/main/Backend
+    git clone git clone https://github.com/laresp23/watchpy_app.git
     ```
 
-2. Instala las dependencias:
+2. Instala el entorno virtual y las dependencias:
 
     ```bash
+    python3 -m venv myenv
+    myenv\Scripts\activate
     pip install -r requirements.txt
     ```
 
