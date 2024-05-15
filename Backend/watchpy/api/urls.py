@@ -24,7 +24,7 @@ from .views import (
     CustomTokenRefreshView,
     CustomTokenVerifyView
 )
-
+ 
 urlpatterns = [
     path('', raiz_api, name='raiz-api'),
     path('home/', Home.as_view(), name='home'),

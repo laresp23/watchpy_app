@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class PerfilUsuario(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="profiles", verbose_name="Usuario", default=1 
+        User, on_delete=models.CASCADE, related_name="profiles", verbose_name="Usuario"
     )
     profile_name = models.CharField(max_length=100, verbose_name="Perfil", default="Mi Perfil")
     bio = models.TextField(blank=True, verbose_name="Biografía")
@@ -23,7 +24,6 @@ class PerfilUsuario(models.Model):
         verbose_name = "Perfil de Usuario"
         verbose_name_plural = "Perfiles de Usuario"
         ordering = ['user', 'profile_name']
-
 
 class Pelicula(models.Model):
     title = models.CharField(max_length=255, verbose_name="Título")

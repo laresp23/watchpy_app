@@ -37,18 +37,20 @@ La API de Watch.PY es una plataforma de streaming que proporciona endpoints para
     git clone git clone https://github.com/laresp23/watchpy_app.git
     ```
 
-2. Instala el entorno virtual y las dependencias:
+2. Instala el entorno virtual, las dependencias y abrimos la carpeta desde linea de comandos:
 
     ```bash
     python3 -m venv myenv
     myenv\Scripts\activate
     pip install -r requirements.txt
+    cd watchpy
     ```
 
 3. Ejecuta las migraciones:
 
     ```bash
     python manage.py makemigrations
+    python manage.py makemigrations api
     ```
 
 4. Aplica las migraciones:

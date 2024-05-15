@@ -7,7 +7,7 @@ class PerfilUsuarioAdmin(admin.ModelAdmin):
     list_display = ('user', 'profile_name', 'bio', 'avatar', 'created_at')
     search_fields = ('user__username', 'profile_name')
     list_filter = ('created_at', 'age', 'preferred_language')
-    filter_horizontal = ('favorite_movies', 'favorite_series')  # Muestra campos ManyToMany como selección horizontal
+    filter_horizontal = ('favorite_movies', 'favorite_series') 
 
     fieldsets = (
         (None, {
@@ -15,7 +15,7 @@ class PerfilUsuarioAdmin(admin.ModelAdmin):
         }),
         ('Información Adicional', {
             'fields': ('bio', 'age', 'preferred_language', 'favorite_movies', 'favorite_series'),
-            'classes': ('collapse',)  # Oculta este bloque de información adicional por defecto
+            'classes': ('collapse',)  
         }),
     )
 

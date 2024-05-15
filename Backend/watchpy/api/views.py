@@ -11,7 +11,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
-
+ 
 from .serializers import (
     UsuarioSerializer,
     LoginSerializer,
