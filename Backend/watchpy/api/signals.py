@@ -14,10 +14,11 @@ from .models import PerfilUsuario
 @receiver(post_save, sender=User)
 def crear_perfil_usuario(sender, instance, created, **kwargs):
     if created:
-        PerfilUsuario.objects.create(usuario=instance)
+        PerfilUsuario.objects.create(user=instance)
 
 # Guardar el perfil de usuario después de guardar un usuario si no existe
 @receiver(post_save, sender=User)
 def guardar_perfil_usuario(sender, instance, created, **kwargs):
     if created and not hasattr(instance, 'perfilusuario'):
-        PerfilUsuario.objects.create(usuario=instance)
+        PerfilUsuario.objects.create(user=instance)
+

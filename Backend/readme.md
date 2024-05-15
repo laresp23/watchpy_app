@@ -1,112 +1,104 @@
-# Watch.PY API
+# API de Watch.PY
 
-Esta API forma parte del backend para el proyecto de fin de ciclo de Desarrollo de Aplicaciones Web (DAW). Proporciona endpoints para acceder a información sobre películas y series, así como funcionalidades de autenticación de usuarios.
+La API de Watch.PY es una plataforma de streaming que proporciona endpoints para obtener información sobre películas, series, usuarios y perfiles, así como para la autenticación de usuarios mediante tokens JWT. También integra datos de la API externa The Movie Database para ofrecer detalles y trailers de películas y series.
 
-## Endpoints
+## Funcionalidades principales
 
-### Home
+- **Inicio:** Proporciona información sobre la API.
+- **Documentación de la API:** Ofrece la documentación detallada de todos los endpoints de la API.
+- **Obtener token de acceso:** Permite a los usuarios autenticados obtener un token de acceso JWT proporcionando sus credenciales de inicio de sesión.
+- **Refrescar token de acceso:** Permite refrescar un token de acceso JWT expirado mediante la presentación de un token de actualización válido.
+- **Verificar token de acceso:** Permite verificar la validez de un token de acceso JWT.
+- **Listar películas y series:** Obtiene la lista de todas las películas y series disponibles en la API.
+- **Listar películas y series populares:** Obtiene la lista de películas y series populares en la API.
+- **Detalle de una película o serie:** Obtiene los detalles de una película o serie específica identificada por su clave primaria.
+- **Registrar usuario:** Permite registrar un nuevo usuario en la API.
+- **Iniciar sesión de usuario:** Permite a un usuario iniciar sesión en la API proporcionando sus credenciales de inicio de sesión.
+- **Cerrar sesión de usuario:** Permite a un usuario cerrar sesión en la API, invalidando su token de acceso.
+- **Listar usuarios:** Obtiene la lista de todos los usuarios registrados en la API.
+- **Obtener, actualizar y eliminar un usuario específico:** Permite obtener, actualizar y eliminar usuarios específicos identificados por su id.
+- **Listar y crear perfiles de usuario:** Permite listar todos los perfiles de usuario existentes y crear nuevos perfiles de usuario.
+- **Obtener y actualizar el perfil de usuario:** Permite obtener y actualizar el perfil de usuario.
 
-- **URL:** `/`
-- **Método:** GET
-- **Descripción:** Renderiza la página de inicio.
-- **Respuesta:** JSON con un mensaje de bienvenida.
+## Uso de la API
 
-### Películas
-
-- **URL:** `/peliculas/`
-- **Método:** GET
-- **Descripción:** Obtiene y muestra las películas populares.
-- **Respuesta:** JSON con la lista de películas populares.
-
-### Series
-
-- **URL:** `/series/`
-- **Método:** GET
-- **Descripción:** Obtiene y muestra las series populares.
-- **Respuesta:** JSON con la lista de series populares.
-
-### Detalle de medio
-
-- **URL:** `/detalle-media/`
-- **Método:** GET
-- **Descripción:** Obtiene los detalles de una película o serie y su trailer.
-- **Parámetros GET:**
-  - `media_type`: tipo de medio ('movie' o 'tv').
-  - `id`: ID de la película o serie.
-- **Respuesta:** JSON con los detalles del medio y el trailer.
-
-### Registro de usuario
-
-- **URL:** `/register/`
-- **Método:** POST
-- **Descripción:** Registra un nuevo usuario.
-- **Parámetros POST:** `username`, `password`.
-- **Respuesta:** JSON con un mensaje de éxito o error.
-
-### Inicio de sesión de usuario
-
-- **URL:** `/login/`
-- **Método:** POST
-- **Descripción:** Inicia sesión de un usuario.
-- **Parámetros POST:** `username`, `password`.
-- **Respuesta:** JSON con un mensaje de éxito o error.
-
-### Cierre de sesión de usuario
-
-- **URL:** `/logout/`
-- **Método:** POST
-- **Descripción:** Cierra sesión de un usuario.
-- **Respuesta:** JSON con un mensaje de éxito.
-
-### Obtener usuario
-
-- **URL:** `/user/<user_id>/`
-- **Método:** GET
-- **Descripción:** Obtiene los detalles de un usuario.
-- **Respuesta:** JSON con el nombre de usuario o un mensaje de error.
-
-### Actualizar usuario
-
-- **URL:** `/user/<user_id>/`
-- **Método:** PUT
-- **Descripción:** Actualiza los detalles de un usuario.
-- **Parámetros PUT:** `username`.
-- **Respuesta:** JSON con un mensaje de éxito o error.
-
-### Eliminar usuario
-
-- **URL:** `/user/<user_id>/`
-- **Método:** DELETE
-- **Descripción:** Elimina un usuario.
-- **Respuesta:** JSON con un mensaje de éxito o error.
-
-## Recursos externos
-
-La API utiliza la base de datos de The Movie Database (TMDb) para obtener información sobre películas y series.
-
-## Requisitos
+### Requisitos
 
 - Python 3.x
 - Django
-- Django Rest Framework
-- Paquete `requests`
+- Django REST Framework
+- Requests
 
-## Configuración
+### Instalación
 
-1. Clona este repositorio.
-2. Instala las dependencias con `pip install -r requirements.txt`.
-3. Ejecuta las migraciones con `python manage.py migrate`.
-4. Obtén una clave de API de The Movie Database y configúrala en la función `obtener_api_key()`.
+1. Clona el repositorio:
 
-## Uso
+    ```bash
+    git clone https://github.com/laresp23/watchpy_app/tree/main/Backend
+    ```
 
-1. Ejecuta el servidor con `python manage.py runserver`.
-2. Accede a los endpoints según sea necesario.
+2. Instala las dependencias:
 
-## Contribución
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-Si quieres contribuir a este proyecto, siéntete libre de abrir un *pull request*.
+3. Ejecuta las migraciones:
+
+    ```bash
+    python manage.py makemigrations
+    ```
+
+4. Aplica las migraciones:
+
+    ```bash
+    python manage.py migrate
+    ```
+
+5. Crea un superusuario:
+
+    ```bash
+    python manage.py createsuperuser
+    ```
+
+6. Recolecta los archivos estáticos:
+
+    ```bash
+    python manage.py collectstatic
+    ```
+
+7. Inicia el servidor:
+
+    ```bash
+    python manage.py runserver
+    ```
+
+
+### Documentación
+
+Accede a la documentación de la API en http://localhost:8000/api/docs/.
+
+### Endpoints principales
+
+- **Inicio:** `/api/`
+- **Documentación de la API:** `/api/docs/`
+- **Obtener token de acceso:** `/api/token/`
+- **Refrescar token de acceso:** `/api/token/refresh/`
+- **Verificar token de acceso:** `/api/token/verify/`
+- **Listar películas:** `/api/peliculas/`
+- **Listar series:** `/api/series/`
+- **Listar películas populares:** `/api/peliculas/populares/`
+- **Listar series populares:** `/api/series/populares/`
+- **Detalle de una película:** `/api/pelicula/<id>/`
+- **Detalle de una serie:** `/api/serie/<id>/`
+- **Registrar usuario:** `/api/registrar/`
+- **Iniciar sesión de usuario:** `/api/iniciar-sesion/`
+- **Cerrar sesión de usuario:** `/api/cerrar-sesion/`
+- **Listar usuarios:** `/api/usuarios/`
+- **Obtener, actualizar y eliminar un usuario específico:** `/api/usuarios/<id>/`
+- **Listar y crear perfiles de usuario:** `/api/perfiles/`
+- **Obtener y actualizar el perfil de usuario:** `/api/perfiles/<id>/`
 
 ## Licencia
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.

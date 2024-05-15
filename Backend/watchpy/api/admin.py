@@ -1,26 +1,35 @@
-# Importación del módulo de administración de Django
 from django.contrib import admin
-
-# Importación de modelos
-from .models import Pelicula, Serie, PerfilUsuario
-
-# Registro de Película en el panel de administración
-@admin.register(Pelicula)
-class PeliculaAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'descripcion', 'fecha_estreno', 'ruta_poster')
-    search_fields = ('titulo', 'descripcion')
-    list_filter = ('fecha_estreno',)
-
-# Registro de Serie en el panel de administración
-@admin.register(Serie)
-class SerieAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'descripcion', 'fecha_estreno', 'ruta_poster')
-    search_fields = ('titulo', 'descripcion')
-    list_filter = ('fecha_estreno',)
+from .models import PerfilUsuario, Pelicula, Serie
 
 # Registro de PerfilUsuario en el panel de administración
 @admin.register(PerfilUsuario)
 class PerfilUsuarioAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'biografia', 'avatar', 'creado_en')
-    search_fields = ('usuario__username',)
-    list_filter = ('creado_en',)
+    list_display = ('user', 'profile_name', 'bio', 'avatar', 'created_at')
+    search_fields = ('user__username', 'profile_name')
+    list_filter = ('created_at', 'age', 'preferred_language')
+    filter_horizontal = ('favorite_movies', 'favorite_series')  # Muestra campos ManyToMany como selección horizontal
+
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'profile_name', 'avatar')
+        }),
+        ('Información Adicional', {
+            'fields': ('bio', 'age', 'preferred_language', 'favorite_movies', 'favorite_series'),
+            'classes': ('collapse',)  # Oculta este bloque de información adicional por defecto
+        }),
+    )
+
+# Registro de Pelicula en el panel de administración
+@admin.register(Pelicula)
+class PeliculaAdmin(admin.ModelAdmin):
+    list_display = ('title', 'release_date', 'vote_average')
+    search_fields = ('title',)
+    list_filter = ('release_date', 'vote_average')
+
+# Registro de Serie en el panel de administración
+@admin.register(Serie)
+class SerieAdmin(admin.ModelAdmin):
+    list_display = ('title', 'release_date', 'vote_average')
+    search_fields = ('title',)
+    list_filter = ('release_date', 'vote_average')
+
