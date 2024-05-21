@@ -13,8 +13,8 @@ Este repositorio contiene el código fuente para el proyecto Watch.PY, una plata
 
 ## Tecnologías Utilizadas
 
-- **Frontend:** (En desarrollo)
-- **Backend:** Django , ORM Django , SQLite
+- **Frontend:** React, Vite, Tailwind CSS.
+- **Backend:** Django , ORM Django , SQLite, API.
 
 ## Instalación
 
