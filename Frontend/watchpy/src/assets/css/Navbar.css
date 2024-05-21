@@ -1,0 +1,13 @@
+.bg-navbar {
+    background-color: transparent;
+  }
+  
+#navbarNavSmall Link{
+  margin-top: 10px;
+  border-bottom: solid 1px;
+
+}
+
+.navbar {
+  height: 60px; /* Altura fija del Navbar */
+}

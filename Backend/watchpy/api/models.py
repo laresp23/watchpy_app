@@ -26,7 +26,7 @@ class PerfilUsuario(models.Model):
         ordering = ['user', 'profile_name']
 
 class Pelicula(models.Model):
-    title = models.CharField(max_length=255, verbose_name="Título")
+    title = models.CharField(max_length=255,default="", verbose_name="Título")
     overview = models.TextField(verbose_name="Descripción", default="", blank=True)
     release_date = models.DateField(verbose_name="Fecha de Estreno", null=True, blank=True)
     poster_path = models.URLField(verbose_name="URL del Póster", blank=True)
@@ -42,16 +42,16 @@ class Pelicula(models.Model):
 
 
 class Serie(models.Model):
-    title = models.CharField(max_length=255, verbose_name="Título")
+    name = models.CharField(max_length=255,default="", verbose_name="Nombre")
     overview = models.TextField(verbose_name="Descripción", default="", blank=True)
     release_date = models.DateField(verbose_name="Fecha de Estreno", null=True, blank=True)
     poster_path = models.URLField(verbose_name="URL del Póster", blank=True)
     vote_average = models.FloatField(verbose_name="Calificación", default=0.0)
 
     def __str__(self):
-        return self.title
+        return self.name
 
     class Meta:
         verbose_name = "Serie"
         verbose_name_plural = "Series"
-        ordering = ['title']
+        ordering = ['name']

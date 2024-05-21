@@ -1,0 +1,14 @@
+.bg-jumbotron {
+    background-image: url('https://source.unsplash.com/1600x900/?movie');
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 50px;
+  }
+  
+  .text-jumbotron {
+    color: #ffffff;
+  }

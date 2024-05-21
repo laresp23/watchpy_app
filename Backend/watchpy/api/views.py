@@ -318,3 +318,7 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 class CustomTokenVerifyView(TokenVerifyView):
     permission_classes = [AllowAny]
+
+
+
+print(obtener_medios('tv')[1])

@@ -29,7 +29,7 @@ class PeliculaAdmin(admin.ModelAdmin):
 # Registro de Serie en el panel de administración
 @admin.register(Serie)
 class SerieAdmin(admin.ModelAdmin):
-    list_display = ('title', 'release_date', 'vote_average')
-    search_fields = ('title',)
+    list_display = ('name', 'release_date', 'vote_average')
+    search_fields = ('name',)
     list_filter = ('release_date', 'vote_average')
 

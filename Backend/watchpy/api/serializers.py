@@ -64,4 +64,4 @@ class SerieSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Serie
-        fields = ['id', 'title', 'overview', 'release_date', 'poster_path', 'vote_average']
+        fields = ['id', 'name', 'overview', 'release_date', 'poster_path', 'vote_average']
