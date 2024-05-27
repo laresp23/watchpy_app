@@ -18,7 +18,7 @@ WatchPy es una aplicación desarrollada con React y Vite que te permite explorar
    git clone git clone https://github.com/laresp23/watchpy_app.git
    ```
 
-2. Instalar Dependencias:
+2. Instalar Dependencias: 
 
    ```bash
    cd Frontend

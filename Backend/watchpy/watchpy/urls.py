@@ -47,8 +47,8 @@ urlpatterns = [
     path("api/series/populares/", SeriesPopulares.as_view(), name="series-populares"),
     path("api/pelicula/<int:pk>/", DetallePelicula.as_view(), name="detalle-pelicula"),
     path("api/serie/<int:pk>/", DetalleSerie.as_view(), name="detalle-serie"),
-    path("api/perfiles/", PerfilUsuarioAPIView.as_view(), name="perfil-usuario-list"),  # Listar y crear perfiles de usuario
-    path("api/perfiles/<int:perfil_id>/", PerfilUsuarioAPIView.as_view(), name="perfil-usuario-detail"),  # Obtener, actualizar y eliminar perfiles de usuario
+    path("api/perfiles/", PerfilUsuarioAPIView.as_view(), name="perfil-usuario-list"),
+    path("api/perfiles/<int:perfil_id>/", PerfilUsuarioAPIView.as_view(), name="perfil-usuario-detail"), 
 
     # Autenticación de usuarios
     path("api/usuarios/", ListaUsuarios.as_view(), name="lista_usuarios"),

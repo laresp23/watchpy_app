@@ -16,6 +16,7 @@ export default defineConfig({
     },
   },
   build: {
-    base: './', // Establece la ruta base para la construcción
+    base: './', 
   },
 });
+ 

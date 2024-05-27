@@ -13,5 +13,4 @@ def manejar_crear_o_actualizar_perfil(sender, instance, created, **kwargs):
         else:
             # Si el perfil de usuario ya existe, actualizamos los datos si es necesario
             perfil_usuario = instance.perfilusuario
-            # Puedes agregar aquí la lógica para actualizar los campos del perfilusuario si es necesario
             perfil_usuario.save()

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import logo from '/logo.png'; // Importa el logo SVG
+import logo from '/logo.png';
 import '../assets/css/Navbar.css'
 
 function Navbar() {
@@ -14,7 +14,7 @@ function Navbar() {
     <nav className="bg-navbar p-4 absolute w-full z-10">
       <div className="container mx-auto flex flex-wrap items-center justify-between">
         <Link to="/" className="text-2xl font-bold flex items-center">
-          <img src={logo} alt="Logo" className="h-8 mr-2" /> {/* Utiliza el logo */}
+          <img src={logo} alt="Logo" className="h-8 mr-2" />
         </Link>
         <button
           onClick={toggleNavbar}

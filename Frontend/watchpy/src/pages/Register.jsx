@@ -17,12 +17,11 @@ function Register() {
     event.preventDefault();
     setLoading(true);
     try {
-      // Validar que las contraseñas coincidan
       if (password !== confirmPassword) {
         throw new Error('Las contraseñas no coinciden');
       }
       await register(username, password, email);
-      navigate('/login'); // Redirige al login después del registro exitoso
+      navigate('/login'); 
     } catch (error) {
       setError(error.message);
     }
