@@ -16,7 +16,7 @@ function Login() {
     setLoading(true);
     try {
       await login(username, password);
-      navigate('/home');
+      navigate('/profiles');
     } catch (error) {
       setError(error.message || 'Hubo un problema con el inicio de sesión.');
     }

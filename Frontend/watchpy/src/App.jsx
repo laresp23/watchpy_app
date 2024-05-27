@@ -4,6 +4,7 @@ import Index from './pages/Index';
 import Login from './pages/Login';
 import Register from './pages/Register.jsx';
 import Home from './pages/Home.jsx';
+import Profiles from './pages/Profiles.jsx';
 
 
 import './index.css';
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/profiles" element={<Profiles />} />
       </Routes>
     </Router>
   );

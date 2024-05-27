@@ -33,8 +33,15 @@ if (token) {
 export const login = async (username, password) => {
   try {
     const response = await axiosInstance.post('/iniciar-sesion/', { username, password });
-    const { access_token } = response.data;
+    const { access_token, username: loggedInUsername, email } = response.data;
+
+    // Guardar los datos del usuario en sessionStorage
+    sessionStorage.setItem('username', loggedInUsername);
+    sessionStorage.setItem('email', email);
+
+    // Establecer el token de acceso en sessionStorage
     setAuthToken(access_token);
+
     return response.data;
   } catch (error) {
     console.error('Axios error:', error);
@@ -62,10 +69,30 @@ export const getPeliculas = async () => {
   }
 };
 
+export const getPeliculasFavoritas = async () => {
+  try {
+    const response = await axiosInstance.get('/peliculas-populares/');
+    return response.data.peliculas_populares;
+  } catch (error) {
+    console.error('Axios error:', error);
+    throw error;
+  }
+};
+
 export const getSeries = async () => {
   try {
     const response = await axiosInstance.get('/series/');
-    return response.data.series; // Corregido para devolver las series
+    return response.data.series;
+  } catch (error) {
+    console.error('Axios error:', error);
+    throw error;
+  }
+};
+
+export const getSeriesFavoritas = async () => {
+  try {
+    const response = await axiosInstance.get('/series-populares/');
+    return response.data.series_populares;
   } catch (error) {
     console.error('Axios error:', error);
     throw error;
