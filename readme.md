@@ -27,4 +27,4 @@ Para configurar y ejecutar el proyecto, sigue los siguientes pasos:
     ```
 2. Abre la carpeta Backend y sigue las indicaciones del readme.md
 
-3. Abre la carpeta Frontend (Cuando este completo) y sigue las indicaciones que se redactaran en el archivo readme.md
+3. Abre la carpeta Frontend y sigue las indicaciones del readme.md
